@@ -1,28 +1,36 @@
 import React,{useEffect} from 'react';
+
+import {useDispatch} from 'react-redux';
+
+import {BrowserRouter as Router ,Route,Switch} from 'react-router-dom';
 import './App.css';
-import Header from './components/Header';
-import {BrowserRouter,Route} from 'react-router-dom';
-import Home from './components/Home';
-import Profile from './components/Profile';
-import {connect} from 'react-redux'
-import {fetchUserAction} from './actions/myaction'
-function App(props) {
-  useEffect(()=>{
-     props.fetch_user()
-  },[])
+
+import Button from './components/buttons/Button';
+import Profile from './components/profile/Profile';
+import Navbar from './components/navbar/Navbar';
+
+// ACTIONS
+import {fetchAll} from './actions/authActions'
+
+function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch( fetchAll())
+  }, [])//DidMount
+
+
   return (
-   <BrowserRouter>
-     <Header />
-     <Route exact path="/" component={Home} />
-     <Route path="/profile" component={Profile} />
-   </BrowserRouter>
+    
+    <Router>
+    <Navbar />
+      <Switch>
+                <Route exact path="/" component={Button} />
+                <Route exact path="/profile" component={Profile} />
+      </Switch>
+    </Router>
   );
 }
 
-const mapDispathToProps = (dispatch)=>{
-  return {
-    fetch_user:()=>{dispatch(fetchUserAction())}
-  }
-}
-
-export default connect(null,mapDispathToProps)(App);
+export default App;
